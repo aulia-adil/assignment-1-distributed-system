@@ -3,12 +3,11 @@ import multiprocessing
 import pprint
 import random
 import sys
-import time
 from argparse import ArgumentParser
-import node
 
 # RUN IN PYTHON 3.8.8
 import city
+import node
 
 list_nodes = []
 

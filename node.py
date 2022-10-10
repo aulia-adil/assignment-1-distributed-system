@@ -88,6 +88,17 @@ class SupremeGeneral(General):
 def thread_exception_handler(args):
     logging.error(f"Uncaught exception", exc_info=(args.exc_type, args.exc_value, args.exc_traceback))
 
+    
+def reload_logging_windows(filename):
+    log = logging.getLogger()
+    for handler in log.handlers:
+        log.removeHandler(handler)
+    logging.basicConfig(format='%(asctime)-4s %(levelname)-6s %(threadName)s:%(lineno)-3d %(message)s',
+                        datefmt='%H:%M:%S',
+                        filename=filename,
+                        filemode='w',
+                        level=logging.INFO)
+    
 
 def main(is_traitor: bool, node_id: int, ports: list,
          my_port: int = 0, order: Order = Order.RETREAT,
@@ -95,8 +106,10 @@ def main(is_traitor: bool, node_id: int, ports: list,
     threading.excepthook = thread_exception_handler
     try:
         if node_id > 0:
+            reload_logging_windows(f"logs/general{node_id}.txt")
             logging.info(f"General {node_id} is running...")
         else:
+            reload_logging_windows(f"logs/supreme_general.txt")
             logging.info("Supreme general is running...")
         logging.debug(f"is_traitor: {is_traitor}")
         logging.debug(f"ports: {pformat(ports)}")
